@@ -14,10 +14,15 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class MainApp extends Application {
 
     private ConfigurableApplicationContext springContext;
+    private Parent rootNode;
 
     @Override
     public void init() throws Exception {
+        // SpringApplicationBuilder builder = new SpringApplicationBuilder(MainApp.class);
         springContext = SpringApplication.run(MainApp.class);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"));
+        loader.setControllerFactory(springContext::getBean);
+        rootNode = loader.load();
     }
 
     @Override
@@ -25,12 +30,11 @@ public class MainApp extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
         Scene scene = new Scene(root, 600, 550);
         //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-        stage.setScene(scene);
+        stage.setScene(new Scene(rootNode));
 
         stage.show();
     }
 
-   
     public static void main(String[] args) {
         launch(args);
     }
