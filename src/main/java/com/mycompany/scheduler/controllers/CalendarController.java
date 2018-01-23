@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @author jdharri
  */
 @Component
-public class MainController implements Initializable {
+public class CalendarController implements Initializable {
 
     /**
      * Initializes the controller class.

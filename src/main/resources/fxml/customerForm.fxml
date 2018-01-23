@@ -8,21 +8,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="514.0" prefWidth="517.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller=".CustomerFormController">
+<AnchorPane id="AnchorPane" prefHeight="379.0" prefWidth="382.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller=".CustomerFormController">
     <stylesheets>
         <URL value="@/styles/customerform.css" />
     </stylesheets>
    <children>
-      <TextField fx:id="customerName" layoutX="118.0" layoutY="66.0" prefHeight="25.0" prefWidth="245.0" promptText="Customer Name" />
-      <TextField fx:id="address" layoutX="118.0" layoutY="101.0" prefHeight="25.0" prefWidth="245.0" promptText="address" />
-      <TextField fx:id="address2" layoutX="118.0" layoutY="137.0" prefHeight="25.0" prefWidth="245.0" promptText="address 2" />
-      <TextField fx:id="city" layoutX="118.0" layoutY="172.0" prefHeight="25.0" prefWidth="245.0" promptText="City" />
-      <TextField fx:id="country" layoutX="118.0" layoutY="207.0" prefHeight="25.0" prefWidth="245.0" promptText="Country" />
-      <TextField fx:id="address21" layoutX="118.0" layoutY="277.0" prefHeight="25.0" prefWidth="245.0" promptText="phone" />
-      <TextField fx:id="postalCode" layoutX="118.0" layoutY="242.0" prefHeight="25.0" prefWidth="245.0" promptText="postal code" />
-      <Button layoutX="268.0" layoutY="327.0" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="saveUserButton" layoutX="162.0" layoutY="327.0" mnemonicParsing="false" onAction="#SaveUser" text="Save" />
-      <Label alignment="CENTER" layoutX="162.0" layoutY="26.0" prefHeight="17.0" prefWidth="158.0" text="Customer">
+      <TextField fx:id="customerName" layoutX="65.0" layoutY="58.0" prefHeight="25.0" prefWidth="245.0" promptText="Customer Name" />
+      <TextField fx:id="address" layoutX="65.0" layoutY="100.0" prefHeight="25.0" prefWidth="245.0" promptText="address" />
+      <TextField fx:id="address2" layoutX="64.0" layoutY="137.0" prefHeight="25.0" prefWidth="245.0" promptText="address 2" />
+      <TextField fx:id="city" layoutX="64.0" layoutY="172.0" prefHeight="25.0" prefWidth="245.0" promptText="City" />
+      <TextField fx:id="country" layoutX="63.0" layoutY="207.0" prefHeight="25.0" prefWidth="245.0" promptText="Country" />
+      <TextField fx:id="address21" layoutX="61.0" layoutY="277.0" prefHeight="25.0" prefWidth="245.0" promptText="phone" />
+      <TextField fx:id="postalCode" layoutX="62.0" layoutY="242.0" prefHeight="25.0" prefWidth="245.0" promptText="postal code" />
+      <Button layoutX="214.0" layoutY="327.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="saveUserButton" layoutX="80.0" layoutY="327.0" mnemonicParsing="false" onAction="#SaveUser" text="Save" />
+      <Label alignment="CENTER" layoutX="134.0" layoutY="22.0" prefHeight="17.0" prefWidth="158.0" text="Customer">
          <font>
             <Font size="18.0" />
          </font>

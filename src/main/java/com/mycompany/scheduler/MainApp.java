@@ -27,11 +27,13 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-        Scene scene = new Scene(root, 600, 550);
+        // Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+        // Scene scene = new Scene(root, 600, 550);
         //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-        stage.setScene(new Scene(rootNode));
-
+        //  stage.setScene(new Scene(rootNode));
+        stage.setTitle("login");
+        Scene scene = new Scene(rootNode, 800, 600);
+        stage.setScene(scene);
         stage.show();
     }
 

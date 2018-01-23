@@ -6,6 +6,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.scheduler.controllers.MainController">
-    
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.scheduler.controllers.MainController">
+   <children>
+      <TabPane layoutX="-1.0" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab closable="false" text="calendar">
+               <graphic>
+                  <fx:include source="Calendar.fxml" />
+               </graphic>
+          </Tab>
+          <Tab text="customer">
+               <content>
+                  <fx:include source="customerList.fxml" />
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
 </AnchorPane>
