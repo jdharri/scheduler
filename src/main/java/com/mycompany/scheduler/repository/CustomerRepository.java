@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.scheduler.repository;
 
 import com.mycompany.scheduler.model.Customer;
@@ -23,8 +19,8 @@ import java.util.logging.Logger;
  */
 public class CustomerRepository {
 
-    private final Logger LOG = Logger.getLogger(CustomerRepository.class.getName());
-    private Connection con;
+    private static final Logger LOG = Logger.getLogger(CustomerRepository.class.getName());
+    private final Connection con;
 
     public CustomerRepository(String driverClassName, String dbUrl, String user, String password) throws SQLException, ClassNotFoundException {
         Class.forName(driverClassName);
