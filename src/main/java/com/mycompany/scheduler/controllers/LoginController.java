@@ -34,6 +34,7 @@ public class LoginController {
 
         System.out.println("here");
         System.out.println("username entered:" + loginUsername.getText());
+        loginLable.setText("blah blah blah");
         System.out.println("Password: " + loginPassword.getText());
         System.out.println("label: " + loginLable.getText());
         System.out.println("localdate: " + LocalDateTime.now());
@@ -45,8 +46,8 @@ public class LoginController {
         System.out.println(currentLocale.getCountry());
       
         if (loginUsername.getText().equals("jdharri") && loginPassword.getText().equals("pass")) {
-            loginLable.setText("Login Success");
-
+//            loginLable.setText("Login Success");
+   loginLable.setText("blah blah blah");
         } else {
             loginLable.setText("Login Failed");
         }
