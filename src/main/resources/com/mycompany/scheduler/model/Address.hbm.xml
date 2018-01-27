@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 27, 2018 12:21:47 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.mycompany.scheduler.model.Address" table="address" catalog="U03Nt0" optimistic-lock="version">
+        <id name="addressId" type="int">
+            <column name="addressId" />
+            <generator class="assigned" />
+        </id>
+        <property name="address" type="string">
+            <column name="address" length="50" not-null="true" />
+        </property>
+        <property name="address2" type="string">
+            <column name="address2" length="50" not-null="true" />
+        </property>
+        <property name="cityId" type="int">
+            <column name="cityId" not-null="true" />
+        </property>
+        <property name="postalCode" type="string">
+            <column name="postalCode" length="10" not-null="true" />
+        </property>
+        <property name="phone" type="string">
+            <column name="phone" length="20" not-null="true" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="createDate" length="19" not-null="true" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="createdBy" length="40" not-null="true" />
+        </property>
+        <property name="lastUpdate" type="timestamp">
+            <column name="lastUpdate" length="19" not-null="true" />
+        </property>
+        <property name="lastUpdateBy" type="string">
+            <column name="lastUpdateBy" length="40" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

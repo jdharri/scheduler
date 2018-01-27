@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 27, 2018 12:21:47 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.mycompany.scheduler.model.Reminder" table="reminder" catalog="U03Nt0" optimistic-lock="version">
+        <id name="reminderId" type="int">
+            <column name="reminderId" />
+            <generator class="assigned" />
+        </id>
+        <property name="reminderDate" type="timestamp">
+            <column name="reminderDate" length="19" not-null="true" />
+        </property>
+        <property name="snoozeIncrement" type="int">
+            <column name="snoozeIncrement" not-null="true" />
+        </property>
+        <property name="snoozeIncrementTypeId" type="int">
+            <column name="snoozeIncrementTypeId" not-null="true" />
+        </property>
+        <property name="appointmentId" type="int">
+            <column name="appointmentId" not-null="true" />
+        </property>
+        <property name="createdBy" type="string">
+            <column name="createdBy" length="45" not-null="true" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="createdDate" length="19" not-null="true" />
+        </property>
+        <property name="remindercol" type="string">
+            <column name="remindercol" length="45" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
