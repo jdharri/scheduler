@@ -3,6 +3,7 @@ package com.mycompany.scheduler.model;
 
 
 import java.util.Date;
+import javax.persistence.Column;
 import org.hibernate.annotations.Type;
 
 /**
@@ -14,8 +15,8 @@ public class User  implements java.io.Serializable {
      private int userId;
      private String userName;
      private String password;
-     @Type(type = "org.hibernate.type.NumericBooleanType")
-     private boolean active;
+
+     private byte active;
      private String createBy;
      private Date createDate;
      private Date lastUpdate;
@@ -24,7 +25,7 @@ public class User  implements java.io.Serializable {
     public User() {
     }
 
-    public User(int userId, String userName, String password, boolean active, String createBy, Date createDate, Date lastUpdate, String lastUpdatedBy) {
+    public User(int userId, String userName, String password, byte active, String createBy, Date createDate, Date lastUpdate, String lastUpdatedBy) {
        this.userId = userId;
        this.userName = userName;
        this.password = password;
@@ -56,11 +57,11 @@ public class User  implements java.io.Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    public boolean getActive() {
+    public byte getActive() {
         return this.active;
     }
     
-    public void setActive(boolean active) {
+    public void setActive(byte active) {
         this.active = active;
     }
     public String getCreateBy() {

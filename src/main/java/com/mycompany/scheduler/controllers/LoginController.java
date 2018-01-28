@@ -5,19 +5,24 @@
  */
 package com.mycompany.scheduler.controllers;
 
-import com.mycompany.scheduler.model.Customer;
 import com.mycompany.scheduler.model.User;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -36,15 +41,43 @@ public class LoginController implements Initializable {
     private TextField loginUsername;
     @FXML
     private TextField loginPassword;
+    @FXML
+    private Button loginButton;
     Locale currentLocale;
     SessionFactory fac;
 
+    /**
+     * This method is where the labels are set based on locale
+     *
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         currentLocale = Locale.getDefault();
+        //if locale is france
+        if (currentLocale.equals(Locale.FRANCE)) {
+            loginLable.setText("Connexion du programmateur");
+            loginUsername.setPromptText("Nom d'utilisateur");
+            loginPassword.setPromptText("Mot de passe");
+            loginButton.setText("S'identifier");
+        }
+        //if locale is us
+        if (currentLocale.equals(Locale.US)) {
+            loginLable.setText("Scheduler Login");
+            loginUsername.setPromptText("Username");
+            loginPassword.setPromptText("Password");
+            loginButton.setText("Login");
+        }
+
     }
 
     public void Login(ActionEvent event) throws Exception {
+
+        Parent mainViewParent = FXMLLoader.load(getClass().getResource("/fxml/TabPane.fxml"));
+        Scene mainViewScene = new Scene(mainViewParent);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure()
                 .build();
@@ -57,57 +90,29 @@ public class LoginController implements Initializable {
         Session session = fac.openSession();
 
         session.beginTransaction();
-        Customer cust = session.find(Customer.class, 1);
-        System.out.println("Name: " + cust.getCustomerName());
-//        Customer c = new Customer();
-//        c.setActive(true);
-//        c.setCustomerName("Fred Flinstone");
-//        c.setCustomerId(2);
-//        c.setCreateDate(new Date());
-//        c.setCreatedBy("me");
-//        c.setLastUpdate(new Date());
-//        c.setAddressId(1);
-//        c.setLastUpdateBy("me");
-//        session.save(c);
-//        session.getTransaction().commit();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+
+        Query query = session.createQuery("from User WHERE userName=:userName");
+        query.setParameter("userName", loginUsername.getText());
+        User user = (User) query.getSingleResult();
+        if (loginPassword.getText().equals(user.getPassword())) {
+
+            loginLable.setText("authentication success");
+            window.setScene(mainViewScene);
+            window.show();
+        } else {
+            System.out.println("username entered:" + loginUsername.getText());
+            System.out.println("should have been username: " + user.getUserName());
+            System.out.println("Password: " + loginPassword.getText());
+            System.out.println("shoudl have been password: " + user.getPassword());
+            loginLable.setText("Authentication failed");
+        }
+
         session.flush();
-        User user = new User();
-        user.setActive(false);
-        user.setCreateBy("me");
-        user.setCreateDate(new Date());
-        user.setUserName("test");
-        user.setPassword("test");
-        user.setLastUpdatedBy("me");
-        user.setUserId(1);
-        user.setLastUpdate(new Date());
-        
-        session.save(user);
-        session.getTransaction().commit();
-        session.flush();
-        
-        
+
         session.close();
         fac.close();
 
-        System.out.println("here");
-        System.out.println("username entered:" + loginUsername.getText());
-        loginLable.setText("blah blah blah");
-        System.out.println("Password: " + loginPassword.getText());
-        System.out.println("label: " + loginLable.getText());
-        System.out.println("localdate: " + LocalDateTime.now());
-        Locale currentLocale = Locale.getDefault();
-        System.out.println(currentLocale.getDisplayLanguage());
-        System.out.println(currentLocale.getCountry());
-        currentLocale = Locale.CHINA;
-        System.out.println(currentLocale.getDisplayLanguage());
-        System.out.println(currentLocale.getCountry());
-
-        if (loginUsername.getText().equals("jdharri") && loginPassword.getText().equals("pass")) {
-//            loginLable.setText("Login Success");
-            loginLable.setText("blah blah blah");
-        } else {
-            loginLable.setText("Login Failed");
-        }
     }
 
 }
