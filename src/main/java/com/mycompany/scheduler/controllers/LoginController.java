@@ -5,6 +5,7 @@
  */
 package com.mycompany.scheduler.controllers;
 
+import com.mycompany.scheduler.MainApp;
 import com.mycompany.scheduler.model.User;
 import java.net.URL;
 import java.util.Locale;
@@ -98,6 +99,7 @@ public class LoginController implements Initializable {
         if (loginPassword.getText().equals(user.getPassword())) {
 
             loginLable.setText("authentication success");
+            MainApp.setCurrentUser(user.getUserName());
             window.setScene(mainViewScene);
             window.show();
         } else {

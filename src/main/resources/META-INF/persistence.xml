@@ -2,14 +2,14 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="sched_pu" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>com.mycompany.scheduler.model.Incrementtypes</class>
-    <class>com.mycompany.scheduler.model.City</class>
-    <class>com.mycompany.scheduler.model.Reminder</class>
-    <class>com.mycompany.scheduler.model.Country</class>
-    <class>com.mycompany.scheduler.model.User</class>
-    <class>com.mycompany.scheduler.model.Appointment</class>
-    <class>com.mycompany.scheduler.model.Customer</class>
     <class>com.mycompany.scheduler.model.Address</class>
+    <class>com.mycompany.scheduler.model.Customer</class>
+    <class>com.mycompany.scheduler.model.Appointment</class>
+    <class>com.mycompany.scheduler.model.City</class>
+    <class>com.mycompany.scheduler.model.Country</class>
+    <class>com.mycompany.scheduler.model.Incrementtypes</class>
+    <class>com.mycompany.scheduler.model.Reminder</class>
+    <class>com.mycompany.scheduler.model.User</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://52.206.157.109:3306/U03Nt0?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="U03Nt0"/>
