@@ -6,7 +6,7 @@
     <class name="com.mycompany.scheduler.model.City" table="city" catalog="U03Nt0" optimistic-lock="version">
         <id name="cityId" type="int">
             <column name="cityId" />
-          <generator class="increment" />
+            <generator class="assigned" />
         </id>
         <property name="city" type="string">
             <column name="city" length="50" not-null="true" />
