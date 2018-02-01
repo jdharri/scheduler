@@ -10,9 +10,12 @@ import com.mycompany.scheduler.model.Address;
 import com.mycompany.scheduler.model.City;
 import com.mycompany.scheduler.model.Country;
 import com.mycompany.scheduler.model.Customer;
+import java.net.URL;
 import java.util.Date;
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -28,7 +31,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  *
  * @author jdharri
  */
-public class CustomerFormController {
+public class CustomerFormController implements Initializable {
 
     @FXML
     AnchorPane customerForm;
@@ -54,26 +57,16 @@ public class CustomerFormController {
     private Label customerFormLabel;
     SessionFactory fac;
     private Integer customerId;
+    @FXML
+    private Button addNewUser;
+//     @FXML
+    private CustomerListController customerListController;
 
     /**
      * Initializes the controller class.
      */
-//    @Override
-//    public void initialize(URL url, ResourceBundle rb) {
-//        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-//                .configure()
-//                .build();
-//        try {
-//            fac = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-//        } catch (Exception e) {
-//            StandardServiceRegistryBuilder.destroy(registry);
-//        }
-//
-//    }
-    public CustomerFormController() {
-    }
-
-    public void populateCustomer(Customer customer) {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure()
                 .build();
@@ -82,7 +75,18 @@ public class CustomerFormController {
         } catch (Exception e) {
             StandardServiceRegistryBuilder.destroy(registry);
         }
-        this.customerId = customer.getCustomerId();
+
+    }
+
+    public void setCustomerListController(CustomerListController con) {
+        this.customerListController = con;
+    }
+
+    public CustomerFormController() {
+    }
+
+    public void populateCustomer(Customer customer) {
+
         Session session = fac.openSession();
         session.beginTransaction();
         Address custAddr = (Address) session.createQuery("from Address WHERE addressId=:addressId")
@@ -145,8 +149,7 @@ public class CustomerFormController {
             custCountry.setCreatedBy(MainApp.getCurrentUser());
             custCountry.setLastUpdate(new Date());
             custCountry.setLastUpdateBy(MainApp.getCurrentUser());
-            session.persist(custCountry);
-            session.flush();
+            session.save(custCountry);
 
             custCity.setCity(city.getText());
             custCity.setCountryId(custCountry.getCountryId());
@@ -154,9 +157,7 @@ public class CustomerFormController {
             custCity.setCreatedBy(MainApp.getCurrentUser());
             custCity.setLastUpdate(new Date());
             custCity.setLastUpdateBy(MainApp.getCurrentUser());
-            session.persist(custCity);
-
-            session.flush();
+            session.save(custCity);
 
 //        Address custAddress = new Address();
             custAddress.setAddress(address.getText());
@@ -168,20 +169,31 @@ public class CustomerFormController {
             custAddress.setLastUpdate(new Date());
             custAddress.setPhone(phone.getText());
             custAddress.setPostalCode(postalCode.getText());
-            session.persist(custAddress);
-            session.flush();
+
+            session.save(custAddress);
+            System.out.println("***********************************addressId: " + custAddress.getAddressId());
 
             customer.setCustomerName(customerName.getText());
             customer.setCreateDate(new Date());
+            customer.setActive(true);
             customer.setLastUpdate(new Date());
             customer.setCreatedBy(MainApp.getCurrentUser());
             customer.setLastUpdateBy(MainApp.getCurrentUser());
             customer.setAddressId(custAddress.getAddressId());
-            session.persist(customer);
+            session.save(customer);
             session.flush();
             session.close();
+            this.cancel.fire();
+              customerListController.addCustomer(customer);
         }
 
+    }
+
+    @FXML
+    private void clearUserId(ActionEvent event) {
+      
+        this.cancel.fire();
+        this.customerId = null;
     }
 
     @FXML
