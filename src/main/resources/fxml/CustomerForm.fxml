@@ -23,7 +23,7 @@
       <TextField fx:id="postalCode" layoutX="62.0" layoutY="242.0" prefHeight="25.0" prefWidth="245.0" promptText="postal code" AnchorPane.leftAnchor="65.0" />
       <Button fx:id="cancel" layoutX="214.0" layoutY="327.0" mnemonicParsing="false" onAction="#CancelUser" text="Cancel" />
       <Button fx:id="saveUserButton" layoutX="80.0" layoutY="327.0" mnemonicParsing="false" onAction="#SaveUser" text="Save" />
-      <Label fx:id="customerFormLabel" alignment="CENTER" layoutX="134.0" layoutY="22.0" prefHeight="17.0" prefWidth="158.0" text="Customer">
+      <Label fx:id="customerFormLabel" alignment="CENTER" layoutX="134.0" layoutY="22.0" prefHeight="17.0" prefWidth="158.0" text="Customer"> 
          <font>
             <Font size="18.0" />
          </font>
