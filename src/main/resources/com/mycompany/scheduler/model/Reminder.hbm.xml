@@ -6,7 +6,7 @@
     <class name="com.mycompany.scheduler.model.Reminder" table="reminder" catalog="U03Nt0" optimistic-lock="version">
         <id name="reminderId" type="int">
             <column name="reminderId" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <property name="reminderDate" type="timestamp">
             <column name="reminderDate" length="19" not-null="true" />

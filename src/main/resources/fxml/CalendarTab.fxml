@@ -7,11 +7,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Tab text="Calendar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Tab text="Calendar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.scheduler.controllers.CalendarTabController">
   <content>
     <AnchorPane fx:id="CalendarTab" minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0">
          <children>
-            <TableView prefHeight="500.0" prefWidth="800.0">
+            <TableView fx:id="tableview" prefHeight="500.0" prefWidth="800.0">
               <columns>
                   <TableColumn minWidth="114.0" prefWidth="75.0" text="Sunday" />
                 <TableColumn minWidth="114.0" prefWidth="75.0" text="Monday" />
@@ -24,7 +24,7 @@
                   <Insets left="5.0" top="70.0" />
                </padding>
             </TableView>
-            <Button fx:id="addAppointmentButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" text="Add appointment" />
+            <Button fx:id="addAppointmentButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#createAppointment" text="Add appointment" />
          </children></AnchorPane>
   </content>
 </Tab>

@@ -6,7 +6,7 @@
     <class name="com.mycompany.scheduler.model.Incrementtypes" table="incrementtypes" catalog="U03Nt0" optimistic-lock="version">
         <id name="incrementTypeId" type="int">
             <column name="incrementTypeId" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <property name="incrementTypeDescription" type="string">
             <column name="incrementTypeDescription" length="45" not-null="true" />
