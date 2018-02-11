@@ -7,12 +7,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.scheduler.controllers.AppointmentFormController">
+<AnchorPane id="AnchorPane" fx:id="appointmentForm" prefHeight="492.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.scheduler.controllers.AppointmentFormController">
     <children>
-        <DatePicker fx:id="appointmentDate" layoutX="225.0" layoutY="91.0" promptText="Choose Date" />
-        <ComboBox fx:id="appointmentCustomer" layoutX="225.0" layoutY="59.0" prefWidth="150.0" promptText="Choose Customer" />
-        <ComboBox fx:id="appointmentStartTime" layoutX="225.0" layoutY="126.0" prefWidth="150.0" />
-        <ComboBox fx:id="appointmentEndTime" layoutX="225.0" layoutY="167.0" prefWidth="150.0" />
+        <DatePicker fx:id="appointmentDate" layoutX="225.0" layoutY="91.0" onAction="#validateDateSelection" promptText="Choose Date" />
+        <ComboBox fx:id="appointmentCustomer" layoutX="225.0" layoutY="59.0" onAction="#validateCustomerSelection" prefWidth="150.0" promptText="With who?" />
+        <ComboBox fx:id="appointmentStartTime" layoutX="225.0" layoutY="126.0" onAction="#validateStartTimeSelection" prefWidth="150.0" promptText="start time" />
+        <ComboBox fx:id="appointmentEndTime" layoutX="225.0" layoutY="167.0" onAction="#validateEndTimeSelection" prefWidth="150.0" promptText="end time" />
         <Label layoutX="176.0" layoutY="130.0" text="From:" />
         <Label layoutX="183.0" layoutY="171.0" text="To:" />
         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="209.0" layoutY="29.0" prefHeight="25.0" prefWidth="182.0" text="Create Appointment" textAlignment="CENTER">
@@ -22,7 +22,9 @@
         </Label>
         <Label layoutX="181.0" layoutY="63.0" text="With:" />
         <Label layoutX="181.0" layoutY="95.0" text="On:" />
-        <Button fx:id="createAppointmentButton" layoutX="209.0" layoutY="238.0" mnemonicParsing="false" text="Create" />
-        <Button fx:id="cancelAppointmentButton" layoutX="339.0" layoutY="238.0" mnemonicParsing="false" text="Cancel" />
+        <Button fx:id="createAppointmentButton" layoutX="211.0" layoutY="320.0" mnemonicParsing="false" onAction="#saveAppointment" text="Create" />
+        <Button fx:id="cancelAppointmentButton" layoutX="339.0" layoutY="320.0" mnemonicParsing="false" text="Cancel" />
+      <TextField fx:id="appointmentLocation" layoutX="226.0" layoutY="209.0" promptText="Location" />
+      <TextField fx:id="appointmentDescription" layoutX="226.0" layoutY="249.0" promptText="description" />
     </children>
 </AnchorPane>

@@ -114,7 +114,7 @@ public class CustomerFormController implements Initializable {
 
     @FXML
     public void SaveUser(ActionEvent event) {
-
+        final String currentUserId = new Integer(MainApp.getCurrentUser().getUserId()).toString();
         try (Session session = fac.openSession()) {
             session.beginTransaction();
             Customer customer;
@@ -146,17 +146,17 @@ public class CustomerFormController implements Initializable {
             //  Country custCountry = new Country();
             custCountry.setCountry(country.getText());
             custCountry.setCreateDate(new Date());
-            custCountry.setCreatedBy(MainApp.getCurrentUser());
+            custCountry.setCreatedBy(currentUserId);
             custCountry.setLastUpdate(new Date());
-            custCountry.setLastUpdateBy(MainApp.getCurrentUser());
+            custCountry.setLastUpdateBy(currentUserId);
             session.save(custCountry);
 
             custCity.setCity(city.getText());
             custCity.setCountryId(custCountry.getCountryId());
             custCity.setCreateDate(new Date());
-            custCity.setCreatedBy(MainApp.getCurrentUser());
+            custCity.setCreatedBy(currentUserId);
             custCity.setLastUpdate(new Date());
-            custCity.setLastUpdateBy(MainApp.getCurrentUser());
+            custCity.setLastUpdateBy(currentUserId);
             session.save(custCity);
 
 //        Address custAddress = new Address();
@@ -164,8 +164,8 @@ public class CustomerFormController implements Initializable {
             custAddress.setAddress2(address2.getText());
             custAddress.setCityId(custCity.getCityId());
             custAddress.setCreateDate(new Date());
-            custAddress.setCreatedBy(MainApp.getCurrentUser());
-            custAddress.setLastUpdateBy(MainApp.getCurrentUser());
+            custAddress.setCreatedBy(currentUserId);
+            custAddress.setLastUpdateBy(currentUserId);
             custAddress.setLastUpdate(new Date());
             custAddress.setPhone(phone.getText());
             custAddress.setPostalCode(postalCode.getText());
@@ -177,21 +177,21 @@ public class CustomerFormController implements Initializable {
             customer.setCreateDate(new Date());
             customer.setActive(true);
             customer.setLastUpdate(new Date());
-            customer.setCreatedBy(MainApp.getCurrentUser());
-            customer.setLastUpdateBy(MainApp.getCurrentUser());
+            customer.setCreatedBy(currentUserId);
+            customer.setLastUpdateBy(currentUserId);
             customer.setAddressId(custAddress.getAddressId());
             session.save(customer);
             session.flush();
             session.close();
             this.cancel.fire();
-              customerListController.addCustomer(customer);
+            customerListController.addCustomer(customer);
         }
 
     }
 
     @FXML
     private void clearUserId(ActionEvent event) {
-      
+
         this.cancel.fire();
         this.customerId = null;
     }
@@ -207,10 +207,6 @@ public class CustomerFormController implements Initializable {
         phone.clear();
         postalCode.clear();
 
-    }
-
-    public String test() {
-        return "it works";
     }
 
 }

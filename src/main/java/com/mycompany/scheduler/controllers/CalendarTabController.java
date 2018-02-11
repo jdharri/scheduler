@@ -5,8 +5,13 @@
  */
 package com.mycompany.scheduler.controllers;
 
+import com.mycompany.scheduler.util.CalendarPane;
 import java.io.IOException;
 import java.net.URL;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -37,7 +43,12 @@ public class CalendarTabController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        CalendarPane calPane = new CalendarPane();
+        BorderPane root = new BorderPane(calPane.getView());
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void createAppointment(Event event) {
@@ -51,5 +62,16 @@ public class CalendarTabController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(CalendarTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void displayWeeklyAppointments() {
+        LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate friday = LocalDate.now().with(DayOfWeek.FRIDAY);
+
+    }
+
+    public void displayMonthlyAppointments() {
+        LocalDate first = LocalDate.now().withDayOfMonth(1);
+        LocalDate last = LocalDate.now().withDayOfMonth(first.lengthOfMonth());
     }
 }

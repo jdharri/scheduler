@@ -99,7 +99,7 @@ public class LoginController implements Initializable {
         if (loginPassword.getText().equals(user.getPassword())) {
 
             loginLable.setText("authentication success");
-            MainApp.setCurrentUser(user.getUserName());
+            MainApp.setCurrentUser(user);
             window.setScene(mainViewScene);
             window.show();
         } else {

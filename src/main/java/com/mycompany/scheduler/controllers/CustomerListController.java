@@ -50,7 +50,7 @@ public class CustomerListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         customerFormController.setCustomerListController(this);
-        System.out.println("*************************" + customerFormController.test());
+     
         customerForm.setVisible(false);
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure()

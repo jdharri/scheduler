@@ -1,5 +1,6 @@
 package com.mycompany.scheduler;
 
+import com.mycompany.scheduler.model.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,7 +9,7 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
-    public static String currentUser;
+    public static User currentUser;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -25,11 +26,11 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    public static String getCurrentUser() {
+    public static User getCurrentUser() {
         return currentUser;
     }
 
-    public static void setCurrentUser(String currentUser) {
+    public static void setCurrentUser(User currentUser) {
         MainApp.currentUser = currentUser;
     }
 
