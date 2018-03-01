@@ -100,6 +100,7 @@ public class CustomerFormController implements Initializable {
         Country custCountry = (Country) session.createQuery("from Country WHERE countryId=:countryId")
                 .setParameter("countryId", custCity.getCountryId())
                 .getSingleResult();
+        this.customerId = customer.getCustomerId();
         this.customerName.setText(customer.getCustomerName());
         this.address.setText(custAddr.getAddress());
         this.address2.setText(custAddr.getAddress2());
@@ -184,7 +185,7 @@ public class CustomerFormController implements Initializable {
             session.flush();
             session.close();
             this.cancel.fire();
-            customerListController.addCustomer(customer);
+            customerListController.refresh();
         }
 
     }

@@ -9,21 +9,13 @@
 
 <Tab text="Calendar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.scheduler.controllers.CalendarTabController">
   <content>
-    <AnchorPane fx:id="CalendarTab" minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0">
+    <AnchorPane fx:id="calendarTab" minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0">
          <children>
-            <TableView fx:id="tableview" prefHeight="500.0" prefWidth="800.0">
-              <columns>
-                  <TableColumn minWidth="114.0" prefWidth="75.0" text="Sunday" />
-                <TableColumn minWidth="114.0" prefWidth="75.0" text="Monday" />
-                  <TableColumn minWidth="114.0" prefWidth="75.0" text="Tuesday" />
-                <TableColumn minWidth="114.0" prefWidth="75.0" text="Wednesday" />
-                  <TableColumn minWidth="114.0" prefWidth="75.0" text="Friday" />
-                  <TableColumn minWidth="114.0" prefWidth="75.0" text="Saturday" />
-              </columns>
+            <ListView fx:id="monthList" prefHeight="600.0" prefWidth="800.0">
                <padding>
-                  <Insets left="5.0" top="70.0" />
+                  <Insets top="80.0" />
                </padding>
-            </TableView>
+            </ListView>
             <Button fx:id="addAppointmentButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#createAppointment" text="Add appointment" />
          </children></AnchorPane>
   </content>

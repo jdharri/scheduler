@@ -34,7 +34,7 @@ public class CustomerListController implements Initializable {
     @FXML
     private ListView<Customer> customerList;
     ObservableList<Customer> customers = FXCollections.observableArrayList();
-    SessionFactory fac;
+    private SessionFactory fac;
     @FXML
     private Tab CustomerTab;
     @FXML
@@ -50,7 +50,7 @@ public class CustomerListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         customerFormController.setCustomerListController(this);
-     
+
         customerForm.setVisible(false);
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure()
@@ -63,6 +63,18 @@ public class CustomerListController implements Initializable {
         }
         this.populateUserList();
 
+        customerList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
+            @Override
+            public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
+                if (null != newValue) {
+                    System.out.println(newValue.getCustomerName() + " Id: " + newValue.getCustomerId());
+                    customerForm.setVisible(true);
+                    customerFormController.populateCustomer(newValue);
+                }
+            }
+
+        });
+
     }
 
     public void test() {
@@ -73,9 +85,12 @@ public class CustomerListController implements Initializable {
         customers.add(customer);
     }
 
+    /**
+     * Populates the user list
+     */
     public void populateUserList() {
 
-        Session session = fac.openSession();
+        Session session = getSession();
         session.beginTransaction();
         List<Customer> customerListResults = session.createQuery("from Customer").list();
 
@@ -83,17 +98,22 @@ public class CustomerListController implements Initializable {
         customerList.setItems(customers);
         session.close();
 
-        customerList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
-            @Override
-            public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
+    }
 
-                System.out.println(newValue.getCustomerName() + " Id: " + newValue.getCustomerId());
-                customerForm.setVisible(true);
-                customerFormController.populateCustomer(newValue);
+    /**
+     * Used to refresh the customer list if a customer is added or edited
+     */
+    public void refresh() {
+        customerList.getItems().clear();
+        this.populateUserList();
+    }
 
-            }
-
-        });
+    private Session getSession() {
+        try (Session session = fac.getCurrentSession();) {
+            return session;
+        } catch (Exception e) {
+            return fac.openSession();
+        }
     }
 
 }

@@ -1,7 +1,12 @@
 package com.mycompany.scheduler.model;
 // Generated Jan 27, 2018 12:21:46 PM by Hibernate Tools 4.3.1
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -150,4 +155,21 @@ public class Appointment implements java.io.Serializable {
         this.lastUpdateBy = lastUpdateBy;
     }
 
+    @Override
+    public String toString() {
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        final SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm a");
+
+      return  String.format("%s %n %s %s - %s",
+                this.title, convertDate(start).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                convertDate(start).format(DateTimeFormatter.ofPattern("HH:mm a")),
+                convertDate(end).format(DateTimeFormatter.ofPattern("HH:mm a")));
+
+    }
+
+    public static LocalDateTime convertDate(final Date date) {
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
 }

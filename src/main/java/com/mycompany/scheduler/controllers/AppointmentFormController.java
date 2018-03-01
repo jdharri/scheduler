@@ -9,6 +9,7 @@ import com.mycompany.scheduler.MainApp;
 import com.mycompany.scheduler.model.Appointment;
 import com.mycompany.scheduler.model.Customer;
 import com.mycompany.scheduler.model.User;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +36,7 @@ import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -71,6 +75,10 @@ public class AppointmentFormController implements Initializable {
     Stage stage;
     @FXML
     private AnchorPane appointmentForm;
+//    @FXML
+    private CalendarTabController calendarTabController;
+    @FXML
+    private AnchorPane calendarTab;
 
     /**
      * Initializes the controller class.
@@ -78,6 +86,9 @@ public class AppointmentFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // stage = (Stage) appointmentDate.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/CalendarTab.fxml"));
+        calendarTabController = loader.getController();
         this.initializeDBConnection();
         this.populateCustomers();
         hours.addAll(this.getHours());
@@ -86,7 +97,13 @@ public class AppointmentFormController implements Initializable {
         appointmentEndTime.getItems().clear();
         appointmentEndTime.getItems().addAll(hours);
         createAppointmentButton.setOnAction((event) -> saveAppointment());
-        cancelAppointmentButton.setOnAction((event) -> cancelAppointment());
+        cancelAppointmentButton.setOnAction((event) -> {
+            try {
+                cancelAppointment();
+            } catch (IOException ex) {
+                Logger.getLogger(AppointmentFormController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 
     }
 
@@ -102,9 +119,34 @@ public class AppointmentFormController implements Initializable {
         return hourSelections;
     }
 
-    private void cancelAppointment() {
-        Stage stage = (Stage) cancelAppointmentButton.getScene().getWindow();
-        stage.close();
+    /**
+     * Cancel the addition of an appointment
+     *
+     * @throws IOException
+     */
+    public void cancelAppointment() throws IOException {
+
+        //   calendarTabController.showCalendar();
+//         appointmentForm.setVisible(false);
+//        ObservableList children = appointmentForm.getParent().getParent().getChildrenUnmodifiable();
+//        AnchorPane calendarT = (AnchorPane) children.get(0);
+//        calendarT.getChildren().forEach(node -> System.out.println(node.getId()));
+//        calendarT.getChildren().forEach(node -> node.setVisible(true));
+        this.clearForm();
+        appointmentForm.setVisible(false);
+        //  calendarT.getChildren() .forEach(node -> System.out.println(node.)));
+
+    }
+
+    /**
+     * Reset the form
+     */
+    public void clearForm() {
+        appointmentLocation.clear();
+        appointmentDescription.clear();
+        appointmentDate.getEditor().clear();
+        appointmentEndTime.getEditor().clear();
+        appointmentStartTime.getEditor().clear();
     }
 
     @FXML
@@ -122,19 +164,18 @@ public class AppointmentFormController implements Initializable {
         appt.setLastUpdateBy(currentUserId);
         appt.setDescription(appointmentDescription.getText());
         appt.setLocation(appointmentLocation.getText());
-        appt.setTitle(String.format("apointment with %s with regard to %s on %s from %s to %s",
-                customer.getCustomerName(), appt.getDescription(),
-                appointmentDate.getValue(), appointmentStartTime.getValue(),
-                appointmentEndTime.getValue()));
+        appt.setTitle(String.format("apointment with %s with regard to %s",
+                customer.getCustomerName(), appt.getDescription()));
         appt.setUrl("http://localhost");
         appt.setContact(currentUserId);
-        try (Session session = fac.openSession()) {
-            session.beginTransaction();
-            session.save(appt);
-            session.flush();
-        }
+        Session session = getSession();
+        session.beginTransaction();
+        session.save(appt);
+        session.flush();
+
         Stage stage = (Stage) createAppointmentButton.getScene().getWindow();
         stage.close();
+        calendarTabController.refresh();
 
 //        if ((appointmentCustomer.getValue() != null)
         //                && (appointmentDate != null)
@@ -159,17 +200,17 @@ public class AppointmentFormController implements Initializable {
     private Date formatDateTime(LocalDate ld, String time) {
         LocalTime lt = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
         LocalDateTime localDateTime = LocalDateTime.of(ld, lt);
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault())
+                .toInstant());
     }
 
     public void populateCustomers() {
 
-        try (Session session = fac.openSession();) {
-            session.beginTransaction();
-            List<Customer> customerListResults = session.createQuery("from Customer").list();
+        Session session = getSession();
+        session.beginTransaction();
+        List<Customer> customerListResults = session.createQuery("from Customer").list();
 
-            appointmentCustomer.getItems().addAll(customerListResults);
-        }
+        appointmentCustomer.getItems().addAll(customerListResults);
 
     }
 
@@ -203,5 +244,17 @@ public class AppointmentFormController implements Initializable {
     @FXML
     public void validateEndTimeSelection() {
 
+    }
+
+    public void setCalendarTabController(CalendarTabController con) {
+        this.calendarTabController = con;
+    }
+
+    private Session getSession() {
+        try (Session session = fac.getCurrentSession();) {
+            return session;
+        } catch (Exception e) {
+            return fac.openSession();
+        }
     }
 }
