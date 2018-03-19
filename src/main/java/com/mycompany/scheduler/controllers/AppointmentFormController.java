@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -192,8 +194,9 @@ public class AppointmentFormController implements Initializable {
     private Date formatDateTime(LocalDate ld, String time) {
         LocalTime lt = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
         LocalDateTime localDateTime = LocalDateTime.of(ld, lt);
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault())
-                .toInstant());
+        ZonedDateTime localZoned = localDateTime.atZone(ZoneId.systemDefault());
+        ZonedDateTime utcZoned = localZoned.withZoneSameInstant(ZoneOffset.UTC);
+        return Date.from(utcZoned.toInstant());
     }
 
     public void populateCustomers() {
