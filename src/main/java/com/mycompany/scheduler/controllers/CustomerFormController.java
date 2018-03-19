@@ -1,10 +1,5 @@
 package com.mycompany.scheduler.controllers;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import com.mycompany.scheduler.MainApp;
 import com.mycompany.scheduler.model.Address;
 import com.mycompany.scheduler.model.City;
@@ -64,6 +59,9 @@ public class CustomerFormController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -78,14 +76,27 @@ public class CustomerFormController implements Initializable {
 
     }
 
-    public void setCustomerListController(CustomerListController con) {
+    /**
+     * Sets the {@link CustomerListController}
+     *
+     * @param con
+     */
+    public void setCustomerListController(final CustomerListController con) {
         this.customerListController = con;
     }
 
+    /**
+     * Constructor
+     */
     public CustomerFormController() {
     }
 
-    public void populateCustomer(Customer customer) {
+    /**
+     * populates the customer form
+     *
+     * @param customer
+     */
+    public void populateCustomer(final Customer customer) {
 
         Session session = fac.openSession();
         session.beginTransaction();
@@ -113,6 +124,11 @@ public class CustomerFormController implements Initializable {
         session.close();
     }
 
+    /**
+     * Save user
+     *
+     * @param event
+     */
     @FXML
     public void SaveUser(ActionEvent event) {
         final String currentUserId = new Integer(MainApp.getCurrentUser().getUserId()).toString();
@@ -190,6 +206,10 @@ public class CustomerFormController implements Initializable {
 
     }
 
+    /**
+     *
+     * @param event
+     */
     @FXML
     private void clearUserId(ActionEvent event) {
 
@@ -197,6 +217,10 @@ public class CustomerFormController implements Initializable {
         this.customerId = null;
     }
 
+    /**
+     *
+     * @param event
+     */
     @FXML
     private void CancelUser(ActionEvent event) {
 

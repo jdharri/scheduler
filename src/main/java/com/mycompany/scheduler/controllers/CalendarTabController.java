@@ -15,11 +15,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -41,14 +38,14 @@ import org.hibernate.query.Query;
  * @author jdharri
  */
 public class CalendarTabController implements Initializable {
-    
+
     @FXML
     private AnchorPane calendarTab;
-    
+
     @FXML
     private ListView monthList;
     ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-    @FXML
+
     private AppointmentFormController appointmentFormController;
     private SessionFactory fac;
     private final SimpleDateFormat queryFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -61,88 +58,116 @@ public class CalendarTabController implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        //   CalendarPane calPane = new CalendarPane();
-        //   appointmentFormController.setCalendarTabController(this);
-        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure()
-                .build();
+    public void initialize(final URL url, final ResourceBundle rb) {
         try {
-            fac = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-        } catch (Exception e) {
-            
-            StandardServiceRegistryBuilder.destroy(registry);
-        }
-//        
-        //    BorderPane root = new BorderPane(calPane.getView());
+            FXMLLoader loader;
+
+            loader = new FXMLLoader(getClass().getResource("/fxml/AppointmentForm.fxml"));
+            appointmentPane = loader.load();
+            appointmentFormController = loader.<AppointmentFormController>getController();
+
+            appointmentFormController.setCalendarTabController(this);
+
+            final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                    .configure()
+                    .build();
+            try {
+                fac = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+            } catch (Exception e) {
+
+                StandardServiceRegistryBuilder.destroy(registry);
+            }
+//
+//    BorderPane root = new BorderPane(calPane.getView());
 //        Scene scene = new Scene(root);
 //        Stage stage = new Stage();
 //        stage.setScene(scene);
 //        stage.show();
-        this.displayMonthlyAppointments();
-    }
-    
-    public void createAppointment(Event event) {
-        try {
-            appointmentPane = FXMLLoader.load(getClass().getResource("/fxml/AppointmentForm.fxml"));
-           Predicate <String> p = s -> s.equals("cancelAppointmentButton");
-            appointmentPane.getChildren().stream().filter(p);
-            appointmentPane.visibleProperty().addListener(new ChangeListener() {
-                @Override
-                public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                    System.out.println("changed*(**********************");
-                    showCalendar();
-                }
-            });
-            calendarTab.getChildren().forEach(node -> node.setVisible(false));
-            
-            if (!calendarTab.getChildren().contains(fac)) {
-                System.out.println("************ not a child adding");
-                calendarTab.getChildren().add(appointmentPane);
-            }
-            appointmentPane.setVisible(true);
-            
+            this.displayMonthlyAppointments();
         } catch (IOException ex) {
+
             Logger.getLogger(CalendarTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void showCalendar() {
-        System.out.println("****************showCalendar");
-        calendarTab.getChildren().forEach(node -> node.setVisible(true));
+
+    /**
+     * Makes the appointment pane visible
+     *
+     * @param event
+     */
+    public void createAppointment(final Event event) {
+
+        calendarTab.getChildren().forEach(node -> node.setVisible(false));
+        if (!calendarTab.getChildren().contains(appointmentPane)) {
+            System.out.println("************ not a child adding");
+            calendarTab.getChildren().add(appointmentPane);
+        }
         appointmentPane.setVisible(true);
     }
-    
+
+    /**
+     * Makes the calendar pane visible
+     */
+    public void showCalendar() {
+        System.out.println("****************showCalendar");
+        calendarTab.getChildren().forEach(node -> node.setVisible(true));
+
+    }
+
+    /**
+     * Displays the appointments by week
+     */
     public void displayWeeklyAppointments() {
         LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
         LocalDate friday = LocalDate.now().with(DayOfWeek.FRIDAY);
-        
+
     }
-    
+
+    /**
+     * Displays appointments by month
+     */
     public void displayMonthlyAppointments() {
         System.out.println("*****************displayMonthlyAppointments");
-        LocalDate first = LocalDate.now().withDayOfMonth(1);
+        LocalDate first = LocalDate.now();
         LocalDate last = LocalDate.now().withDayOfMonth(first.lengthOfMonth());
         Date firstOfMonth = Date.from(first.atStartOfDay()
                 .atZone(ZoneId.systemDefault()).toInstant());
         Date lastOfMonth = Date.from(last.atTime(23, 59)
                 .atZone(ZoneId.systemDefault()).toInstant());
-        Session session = fac.openSession();
+        monthList.getItems().removeAll(monthList.getItems());
+        Session session = getSession();
         session.beginTransaction();
         Query query = session.createQuery("FROM Appointment AS a WHERE a.start BETWEEN :firstOfMonth AND :lastOfMonth");
         //      Query query = session.createQuery("FROM Appointment ");
         query.setParameter("firstOfMonth", firstOfMonth);
         query.setParameter("lastOfMonth", lastOfMonth);
         List<Appointment> appointments = query.getResultList();
-        //   Map<LocalDate, Appointment> apptMap = new TreeMap<>();
 
+        //   Map<LocalDate, Appointment> apptMap = new TreeMap<>();
         //  appointments.stream().filter(predicate)
         appointments.forEach(appt -> monthList.getItems().add(appt));
+        session.close();
 //        List<Appointment> appointments = session.createQuery("from Appointment").list();
         //  tableview.getItems().add(e)
     }
-    
+
+    /**
+     * Refreshes the appointment list
+     */
     public void refresh() {
         displayMonthlyAppointments();
+    }
+
+    /**
+     * Gets the current persistence session
+     *
+     * @return {@link Session}
+     */
+    private Session getSession() {
+        try (Session session = fac.getCurrentSession();) {
+            return session;
+        } catch (Exception e) {
+            return fac.openSession();
+        }
     }
 }

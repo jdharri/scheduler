@@ -56,7 +56,8 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        currentLocale = Locale.getDefault();
+        //currentLocale = Locale.getDefault();
+        currentLocale = Locale.FRANCE;
         //if locale is france
         if (currentLocale.equals(Locale.FRANCE)) {
             loginLable.setText("Connexion du programmateur");

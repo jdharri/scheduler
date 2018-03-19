@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -34,10 +32,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import org.hibernate.Session;
@@ -82,6 +77,9 @@ public class AppointmentFormController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -107,6 +105,12 @@ public class AppointmentFormController implements Initializable {
 
     }
 
+    /**
+     * Utility method to get a list of hours to populate the drop-downs on the
+     * form
+     *
+     * @return List of String
+     */
     private List<String> getHours() {
         LocalDateTime ldt = LocalDateTime.of(2018, Month.JANUARY, 1, 0, 0, 0);
         LocalDateTime nextDay = ldt.plus(1, ChronoUnit.DAYS);
@@ -125,16 +129,10 @@ public class AppointmentFormController implements Initializable {
      * @throws IOException
      */
     public void cancelAppointment() throws IOException {
+        System.out.println("************ cancel appointment");
+        calendarTabController.showCalendar();
 
-        //   calendarTabController.showCalendar();
-//         appointmentForm.setVisible(false);
-//        ObservableList children = appointmentForm.getParent().getParent().getChildrenUnmodifiable();
-//        AnchorPane calendarT = (AnchorPane) children.get(0);
-//        calendarT.getChildren().forEach(node -> System.out.println(node.getId()));
-//        calendarT.getChildren().forEach(node -> node.setVisible(true));
         this.clearForm();
-        appointmentForm.setVisible(false);
-        //  calendarT.getChildren() .forEach(node -> System.out.println(node.)));
 
     }
 
@@ -147,8 +145,12 @@ public class AppointmentFormController implements Initializable {
         appointmentDate.getEditor().clear();
         appointmentEndTime.getEditor().clear();
         appointmentStartTime.getEditor().clear();
+        appointmentForm.setVisible(false);
     }
 
+    /**
+     * Saves an appointment from data entered into the appointment form
+     */
     @FXML
     public void saveAppointment() {
         final String currentUserId = new Integer(MainApp.getCurrentUser().getUserId()).toString();
@@ -172,31 +174,21 @@ public class AppointmentFormController implements Initializable {
         session.beginTransaction();
         session.save(appt);
         session.flush();
-
-        Stage stage = (Stage) createAppointmentButton.getScene().getWindow();
-        stage.close();
+        session.close();
+        calendarTabController.showCalendar();
+        this.clearForm();
         calendarTabController.refresh();
 
-//        if ((appointmentCustomer.getValue() != null)
-        //                && (appointmentDate != null)
-        //                && (appointmentStartTime != null)
-        //                && (appointmentEndTime != null)) {
-        //            Appointment appt = new Appointment();
-        //            appt.setCustomerId(appointmentCustomer.getValue().getCustomerId());
-        //            // appt.set
-        //        } else {
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//
-//        alert.setTitle(
-//                "all fields must be selected");
-//        //   if (appointmentCustomer == null) {
-//        alert.setContentText(
-//                "You didn't select a customer");
-//        alert.showAndWait();
-        // }
-        //  }
     }
 
+    /**
+     * converts a {@link LocalDate} and time {@link String} to a Java
+     * {@link Date} for persistence as a mysql compatible TIMESTAMP
+     *
+     * @param ld
+     * @param time
+     * @return
+     */
     private Date formatDateTime(LocalDate ld, String time) {
         LocalTime lt = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
         LocalDateTime localDateTime = LocalDateTime.of(ld, lt);
