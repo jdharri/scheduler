@@ -11,6 +11,7 @@ import com.mycompany.scheduler.model.Customer;
 import com.mycompany.scheduler.model.User;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -37,6 +38,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javax.management.Notification;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -166,6 +168,7 @@ public class AppointmentFormController implements Initializable {
         appt.setCreatedBy(currentUserId);
         appt.setLastUpdate(new Date());
         appt.setLastUpdateBy(currentUserId);
+        Notification note = new Notification
         appt.setDescription(appointmentDescription.getText());
         appt.setLocation(appointmentLocation.getText());
         appt.setTitle(String.format("apointment with %s with regard to %s",

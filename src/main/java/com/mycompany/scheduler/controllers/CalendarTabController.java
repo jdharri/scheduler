@@ -118,8 +118,31 @@ public class CalendarTabController implements Initializable {
      * Displays the appointments by week
      */
     public void displayWeeklyAppointments() {
-        LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
-        LocalDate friday = LocalDate.now().with(DayOfWeek.FRIDAY);
+        System.out.println("*****************displayWeeklyAppointments");
+    
+
+        LocalDate first = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate last = LocalDate.now().with(DayOfWeek.SUNDAY);
+        Date firstOfWeek = Date.from(first.atStartOfDay()
+                .atZone(ZoneId.systemDefault()).toInstant());
+        Date lastOfWeek = Date.from(last.atTime(23, 59)
+                .atZone(ZoneId.systemDefault()).toInstant());
+        System.out.println("query from: "+first+ " to: "+last);
+        monthList.getItems().removeAll(monthList.getItems());
+        Session session = getSession();
+        session.beginTransaction();
+        Query query = session.createQuery("FROM Appointment AS a WHERE a.start BETWEEN :firstOfWeek AND :lastOfWeek");
+        //      Query query = session.createQuery("FROM Appointment ");
+        query.setParameter("firstOfWeek", firstOfWeek);
+        query.setParameter("lastOfWeek", lastOfWeek);
+        List<Appointment> appointments = query.getResultList();
+
+        //   Map<LocalDate, Appointment> apptMap = new TreeMap<>();
+        //  appointments.stream().filter(predicate)
+        appointments.forEach(appt -> monthList.getItems().add(appt));
+        session.close();
+//        List<Appointment> appointments = session.createQuery("from Appointment").list();
+        //  tableview.getItems().add(e)
 
     }
 
@@ -128,10 +151,11 @@ public class CalendarTabController implements Initializable {
      */
     public void displayMonthlyAppointments() {
         System.out.println("*****************displayMonthlyAppointments");
-        LocalDate first = LocalDate.now();
+        LocalDate first = LocalDate.now().withDayOfMonth(1);
         LocalDate last = LocalDate.now().withDayOfMonth(first.lengthOfMonth());
         Date firstOfMonth = Date.from(first.atStartOfDay()
                 .atZone(ZoneId.systemDefault()).toInstant());
+        System.out.println("query from: "+first+" to: "+last);
         Date lastOfMonth = Date.from(last.atTime(23, 59)
                 .atZone(ZoneId.systemDefault()).toInstant());
         monthList.getItems().removeAll(monthList.getItems());

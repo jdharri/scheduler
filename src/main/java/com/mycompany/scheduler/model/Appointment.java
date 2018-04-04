@@ -2,6 +2,7 @@ package com.mycompany.scheduler.model;
 // Generated Jan 27, 2018 12:21:46 PM by Hibernate Tools 4.3.1
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,9 @@ public class Appointment implements java.io.Serializable {
     private Date start;
     private Date end;
     private Date createDate;
+//    private Instant start;
+//    private Instant end;
+//    private Instant createDate;
     private String createdBy;
     private Date lastUpdate;
     private String lastUpdateBy;
@@ -160,7 +164,7 @@ public class Appointment implements java.io.Serializable {
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         final SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm a");
 
-      return  String.format("%s %n %s %s - %s",
+        return String.format("%s %n %s %s - %s",
                 this.title, convertDate(start).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 convertDate(start).format(DateTimeFormatter.ofPattern("HH:mm a")),
                 convertDate(end).format(DateTimeFormatter.ofPattern("HH:mm a")));
@@ -171,5 +175,8 @@ public class Appointment implements java.io.Serializable {
         return date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
+//        return date.toInstant()
+//                .atZone(ZoneId.systemDefault())
+//                .toLocalDateTime();
     }
 }
