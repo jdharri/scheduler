@@ -16,6 +16,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import org.hibernate.Session;
@@ -62,7 +64,8 @@ public class CustomerListController implements Initializable {
             StandardServiceRegistryBuilder.destroy(registry);
         }
         this.populateUserList();
-
+        Alert alert = new Alert(AlertType.INFORMATION, "This is an alert");
+        alert.show();
         customerList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
             public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
