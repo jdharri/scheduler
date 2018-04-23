@@ -18,7 +18,8 @@
             </ListView>
 <!--            <Button fx:id="addAppointmentButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#createAppointment" text="Add appointment" />
             <Button fx:id="weekButton" layoutX="50.0" layoutY="50.0" mnemonicParsing="false" onAction="#displayWeeklyAppointments" text="Week" />-->
-            <RadioButton mnemonicParsing="false" text="RadioButton" />
+            <RadioButton layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#displayWeeklyAppointments" text="Week" />
+            <RadioButton fx:id="MonthButton" layoutX="70.0" layoutY="10.0" mnemonicParsing="false" onAction="#displayMonthlyAppointments" text="Month" />
             <Button fx:id="MonthButton" layoutX="100.0" layoutY="50.0" mnemonicParsing="false" onAction="#displayMonthlyAppointments" text="Month" />
          </children></AnchorPane>
   </content>
