@@ -5,8 +5,15 @@
  */
 package com.mycompany.scheduler.controllers;
 
+import com.mycompany.scheduler.model.Appointment;
 import com.mycompany.scheduler.model.Customer;
 import java.net.URL;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -25,6 +32,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 
 /**
  * FXML Controller class
@@ -64,8 +72,9 @@ public class CustomerListController implements Initializable {
             StandardServiceRegistryBuilder.destroy(registry);
         }
         this.populateUserList();
-        Alert alert = new Alert(AlertType.INFORMATION, "This is an alert");
-        alert.show();
+//        Alert alert = new Alert(AlertType.INFORMATION, "This is an alert");
+//        alert.show();
+        queryForAppointments();
         customerList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
             public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
@@ -78,6 +87,27 @@ public class CustomerListController implements Initializable {
 
         });
 
+    }
+
+    public void queryForAppointments() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime fifteenMinutesFromNow = now.plus(Duration.ofMinutes(15));
+        Date start = Date.from(now.toInstant(ZoneOffset.UTC));
+        Date end = Date.from(fifteenMinutesFromNow.toInstant(ZoneOffset.UTC));
+       
+        Session session = getSession();
+        Query query = session.createQuery("FROM Appointment AS a WHERE a.start BETWEEN :start AND :end");
+        query.setParameter("start", start);
+        query.setParameter("end", end);
+        List<Appointment> appointments = query.getResultList();
+        createAppointmentAlerts(appointments);
+    }
+
+    public void createAppointmentAlerts(final List<Appointment> appointments) {
+        for (Appointment appt : appointments) {
+            Alert alert = new Alert(AlertType.INFORMATION, String.format("%s You have an appointment with %s at %s", appt.getTitle(), appt.getContact(), appt.getStart()));
+            alert.show();
+        }
     }
 
     public void test() {
