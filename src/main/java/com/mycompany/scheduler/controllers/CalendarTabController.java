@@ -24,6 +24,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -50,6 +52,10 @@ public class CalendarTabController implements Initializable {
     private SessionFactory fac;
     private final SimpleDateFormat queryFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private AnchorPane appointmentPane;
+    @FXML
+    private RadioButton monthToggle;
+    @FXML
+    private RadioButton weekToggle;
 
     /**
      * Initializes the controller class.
@@ -61,7 +67,9 @@ public class CalendarTabController implements Initializable {
     public void initialize(final URL url, final ResourceBundle rb) {
         try {
             FXMLLoader loader;
-
+//            ToggleGroup weekMonthRadioGroup = new ToggleGroup();
+          // weekToggle.setSelected(true);
+//            monthToggle.setToggleGroup(weekMonthRadioGroup);
             loader = new FXMLLoader(getClass().getResource("/fxml/AppointmentForm.fxml"));
             appointmentPane = loader.load();
             appointmentFormController = loader.<AppointmentFormController>getController();
@@ -83,7 +91,8 @@ public class CalendarTabController implements Initializable {
 //        Stage stage = new Stage();
 //        stage.setScene(scene);
 //        stage.show();
-            this.displayMonthlyAppointments();
+        //    this.displayMonthlyAppointments();
+        this.displayWeeklyAppointments();
         } catch (IOException ex) {
 
             Logger.getLogger(CalendarTabController.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,7 +128,6 @@ public class CalendarTabController implements Initializable {
      */
     public void displayWeeklyAppointments() {
         System.out.println("*****************displayWeeklyAppointments");
-    
 
         LocalDate first = LocalDate.now().with(DayOfWeek.MONDAY);
         LocalDate last = LocalDate.now().with(DayOfWeek.SUNDAY);
@@ -127,7 +135,7 @@ public class CalendarTabController implements Initializable {
                 .atZone(ZoneId.systemDefault()).toInstant());
         Date lastOfWeek = Date.from(last.atTime(23, 59)
                 .atZone(ZoneId.systemDefault()).toInstant());
-        System.out.println("query from: "+first+ " to: "+last);
+        System.out.println("query from: " + first + " to: " + last);
         monthList.getItems().removeAll(monthList.getItems());
         Session session = getSession();
         session.beginTransaction();
@@ -155,7 +163,7 @@ public class CalendarTabController implements Initializable {
         LocalDate last = LocalDate.now().withDayOfMonth(first.lengthOfMonth());
         Date firstOfMonth = Date.from(first.atStartOfDay()
                 .atZone(ZoneId.systemDefault()).toInstant());
-        System.out.println("query from: "+first+" to: "+last);
+        System.out.println("query from: " + first + " to: " + last);
         Date lastOfMonth = Date.from(last.atTime(23, 59)
                 .atZone(ZoneId.systemDefault()).toInstant());
         monthList.getItems().removeAll(monthList.getItems());

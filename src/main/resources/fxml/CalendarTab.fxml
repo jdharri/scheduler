@@ -6,21 +6,26 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+ 
 <Tab text="Calendar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.scheduler.controllers.CalendarTabController">
-  <content>
-    <AnchorPane fx:id="calendarTab" minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0">
-         <children>
-            <ListView fx:id="monthList" prefHeight="600.0" prefWidth="800.0">
-               <padding>
-                  <Insets top="80.0" />
-               </padding>
-            </ListView>
-<!--            <Button fx:id="addAppointmentButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#createAppointment" text="Add appointment" />
-            <Button fx:id="weekButton" layoutX="50.0" layoutY="50.0" mnemonicParsing="false" onAction="#displayWeeklyAppointments" text="Week" />-->
-            <RadioButton layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#displayWeeklyAppointments" text="Week" />
-            <RadioButton fx:id="MonthButton" layoutX="70.0" layoutY="10.0" mnemonicParsing="false" onAction="#displayMonthlyAppointments" text="Month" />
-            <Button fx:id="MonthButton" layoutX="100.0" layoutY="50.0" mnemonicParsing="false" onAction="#displayMonthlyAppointments" text="Month" />
-         </children></AnchorPane>
-  </content>
+   <fx:define>
+        <ToggleGroup fx:id="weekMonthRadioGroup"/>
+    </fx:define>   
+    <content>
+        <AnchorPane fx:id="calendarTab" minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0">
+          
+            <children>
+                <ListView fx:id="monthList" prefHeight="600.0" prefWidth="800.0">
+                    <padding>
+                        <Insets top="80.0" />
+                    </padding>
+                </ListView>
+                <Button fx:id="addAppointmentButton" layoutX="20.0" layoutY="40.0" mnemonicParsing="false" onAction="#createAppointment" text="Add appointment" />
+               
+                <RadioButton fx:id="weekToggle" layoutX="10.0" layoutY="10.0" selected="true" mnemonicParsing="false" onAction="#displayWeeklyAppointments" text="Week" toggleGroup="$weekMonthRadioGroup"/>
+                <RadioButton fx:id="monthToggle" layoutX="70.0" layoutY="10.0" mnemonicParsing="false" onAction="#displayMonthlyAppointments" text="Month" toggleGroup="$weekMonthRadioGroup" />
+       
+            </children>
+        </AnchorPane>
+    </content>
 </Tab>
