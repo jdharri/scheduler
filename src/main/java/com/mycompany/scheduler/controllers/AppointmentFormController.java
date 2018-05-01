@@ -7,6 +7,8 @@ import com.mycompany.scheduler.model.Customer;
 import com.mycompany.scheduler.model.User;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -145,12 +148,16 @@ public class AppointmentFormController implements Initializable {
         appointmentStartTime.getEditor().clear();
         appointmentForm.setVisible(false);
     }
+SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
+
+//Date date = isoFormat.parse("2010-05-23T09:01:02");
     /**
      * Saves an appointment from data entered into the appointment form
      */
     @FXML
     public void saveAppointment() {
+       
         final String currentUserId = new Integer(MainApp.getCurrentUser().getUserId()).toString();
         System.out.println("Save Appointment");
         Customer customer = appointmentCustomer.getValue();
@@ -188,12 +195,19 @@ public class AppointmentFormController implements Initializable {
      * @param time
      * @return
      */
-    private Date formatDateTime(LocalDate ld, String time) {
-        LocalTime lt = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
-        LocalDateTime localDateTime = LocalDateTime.of(ld, lt);
-        ZonedDateTime localZoned = localDateTime.atZone(ZoneId.systemDefault());
-        ZonedDateTime utcZoned = localZoned.withZoneSameInstant(ZoneOffset.UTC);
-        return Date.from(utcZoned.toInstant());
+    public Date formatDateTime(LocalDate ld, String time) {
+        try {
+            LocalTime lt = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
+            LocalDateTime localDateTime = LocalDateTime.of(ld, lt);
+            ZonedDateTime localZoned = localDateTime.atZone(ZoneId.systemDefault());
+            ZonedDateTime utcZoned = localZoned.withZoneSameInstant(ZoneOffset.UTC);
+            isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            //  return Date.from(utcZoned.toInstant());
+            return isoFormat.parse(utcZoned.toInstant().toString());
+        } catch (ParseException ex) {
+            Logger.getLogger(AppointmentFormController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void populateCustomers() {

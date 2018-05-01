@@ -74,7 +74,7 @@ public class CustomerListController implements Initializable {
         this.populateUserList();
 //        Alert alert = new Alert(AlertType.INFORMATION, "This is an alert");
 //        alert.show();
-        queryForAppointments();
+        this.queryForAppointments();
         customerList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
             public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
@@ -90,20 +90,23 @@ public class CustomerListController implements Initializable {
     }
 
     public void queryForAppointments() {
+        System.out.println("querying for appointments in the next 15 minutes");
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime fifteenMinutesFromNow = now.plus(Duration.ofMinutes(15));
         Date start = Date.from(now.toInstant(ZoneOffset.UTC));
         Date end = Date.from(fifteenMinutesFromNow.toInstant(ZoneOffset.UTC));
-       
+        System.out.println("***********query start: "+start+"  query end: "+end);
         Session session = getSession();
         Query query = session.createQuery("FROM Appointment AS a WHERE a.start BETWEEN :start AND :end");
         query.setParameter("start", start);
         query.setParameter("end", end);
         List<Appointment> appointments = query.getResultList();
+        System.out.println(appointments.size() + " appointments found");
         createAppointmentAlerts(appointments);
     }
 
     public void createAppointmentAlerts(final List<Appointment> appointments) {
+        System.out.println("creating appointment alerts");
         for (Appointment appt : appointments) {
             Alert alert = new Alert(AlertType.INFORMATION, String.format("%s You have an appointment with %s at %s", appt.getTitle(), appt.getContact(), appt.getStart()));
             alert.show();
